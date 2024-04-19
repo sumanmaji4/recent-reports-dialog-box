@@ -33,9 +33,9 @@ function ReportData({ setShowDialog }) {
   }, [])
 
   return (
-    <div className='flex flex-col w-[50vw] min-h-[600px] min-w-[650px] max-h-[80vh] overflow-y-auto'>
+    <div className='flex flex-col w-[90vw] min-h-[500px] min-w-[480px] max-h-[80vh] max-w-[700px] overflow-y-auto'>
       <section className='flex justify-center items-center p-4'>
-        <p className='flex-1 text-center font-bold text-[18px]'>
+        <p className='flex-1 text-center font-bold text-[16px]'>
           Recently Generated Reports
         </p>
         <span className='p-0.5 mx-2 border-2 border-slate-500 rounded-lg cursor-pointer'>
@@ -49,7 +49,7 @@ function ReportData({ setShowDialog }) {
         </span>
       </section>
       <div>
-        <div className=' bg-gray-100 flex font-semibold text-gray-500 py-1 mb-2'>
+        <div className=' bg-gray-100 flex font-semibold text-gray-500 py-1 mb-2 text-sm'>
           <span className='w-[120px] px-4'>Data</span>
           <span className='flex-1'>Report Name</span>
           <span className='w-[120px] px-4'>Download</span>
@@ -60,7 +60,7 @@ function ReportData({ setShowDialog }) {
         ) : (
           filteredData.map((item) => (
             <div
-              className='flex justify-center mb-6 text-gray-800'
+              className='flex justify-center mb-6 text-gray-800 text-sm'
               key={item.todo}
             >
               <span className='w-[120px] px-4'>
@@ -76,7 +76,7 @@ function ReportData({ setShowDialog }) {
         )}
       </div>
       {/* // footer */}
-      <section className=' border-t p-4 flex justify-around  text-gray-600 items-center text-xs mt-auto'>
+      <section className=' border-t p-4 flex justify-around  text-gray-600 items-center text-xs mt-auto flex-col gap-3 md:flex-row'>
         <section className='flex  gap-2'>
           <button
             disabled={currentPage == 0}
@@ -116,7 +116,10 @@ function ReportData({ setShowDialog }) {
         <section>
           Rows per page
           <select
-            onChange={(e) => setRow(+e.target.value)}
+            onChange={(e) => {
+              setRow(+e.target.value)
+              setCurrentPage(0)
+            }}
             className='border border-gray-500 rounded-md ml-2 h-[24px] w-[42px]'
           >
             <option value={3}>3</option>
