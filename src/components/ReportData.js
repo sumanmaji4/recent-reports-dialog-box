@@ -12,10 +12,10 @@ function ReportData({ setShowDialog }) {
   const [error, setError] = useState('')
   const [currentPage, setCurrentPage] = useState(0)
   const [row, setRow] = useState(3)
-  console.log(row)
+  console.log('row', row)
 
-  let lastPage = Math.floor((data.length + row - 1) / row)
-  let filteredData = data.slice(currentPage * row, currentPage * row + 1 + row)
+  let lastPage = Math.floor((data.length - row + 1) / row)
+  let filteredData = data.slice(currentPage * row, currentPage * row + row)
 
   useEffect(() => {
     setLoading(true)
@@ -26,14 +26,14 @@ function ReportData({ setShowDialog }) {
           setData(data.todos)
         })
     } catch (err) {
-      console.log(err)
+      //   console.log(err)
       setError('Unable to fetch data')
     }
     setLoading(false)
   }, [])
 
   return (
-    <div className='flex flex-col w-[50vw] min-w-[500px] max-h-[80vh] overflow-y-auto'>
+    <div className='flex flex-col w-[50vw] min-h-[600px] min-w-[650px] max-h-[80vh] overflow-y-auto'>
       <section className='flex justify-center items-center p-4'>
         <p className='flex-1 text-center font-bold text-[18px]'>
           Recently Generated Reports
@@ -59,7 +59,10 @@ function ReportData({ setShowDialog }) {
           <p>Loading data... </p>
         ) : (
           filteredData.map((item) => (
-            <div className='flex justify-center mb-6 text-gray-800'>
+            <div
+              className='flex justify-center mb-6 text-gray-800'
+              key={item.todo}
+            >
               <span className='w-[120px] px-4'>
                 <p>22.07.21</p>
                 <p className=' text-xs text-gray-400'>16:25 PM</p>
@@ -73,22 +76,49 @@ function ReportData({ setShowDialog }) {
         )}
       </div>
       {/* // footer */}
-      <section className=' border-t p-4 flex justify-around  text-gray-600 items-center text-sm'>
+      <section className=' border-t p-4 flex justify-around  text-gray-600 items-center text-xs mt-auto'>
         <section className='flex  gap-2'>
-          <span className='flex  items-center gap-1'>
+          <button
+            disabled={currentPage == 0}
+            className='flex  items-center gap-1 cursor-pointer'
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+          >
             <BiFirstPage /> Prev
-          </span>
-          {/* {[...Array(data.length / row)].map((dd, i) => {
-            return <p>{i + 1}</p>
-          })} */}
-          <span className='flex items-center gap-1'>
+          </button>
+          {[...Array(Math.floor((data.length + row - 1) / row))].map(
+            (dd, i) => {
+              return (
+                <p
+                  onClick={() => setCurrentPage(i)}
+                  key={i}
+                  className={
+                    'border border-gray-500 rounded-md p-1 h-[24px] w-[24px] flex items-center justify-center cursor-pointer' +
+                    (i == currentPage
+                      ? ' bg-orange-600 text-white border-orange-600'
+                      : '')
+                  }
+                >
+                  {i + 1}
+                </p>
+              )
+            }
+          )}
+
+          <button
+            disabled={currentPage === lastPage}
+            className='flex items-center gap-1 cursor-pointer'
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          >
             Next
             <BiLastPage />
-          </span>
+          </button>
         </section>
         <section>
           Rows per page
-          <select onChange={(e) => setRow(+e.target.value)}>
+          <select
+            onChange={(e) => setRow(+e.target.value)}
+            className='border border-gray-500 rounded-md ml-2 h-[24px] w-[42px]'
+          >
             <option value={3}>3</option>
             <option value={4}>4</option>
             <option value={5}>5</option>
